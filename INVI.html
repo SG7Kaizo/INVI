@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cumpleaños de Eddy</title>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(to bottom, #f0f0f0, #d0d8e0);
+        color: #333;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 1s ease-in;
+    }
+    body.loaded {
+        opacity: 1;
+    }
+    .card {
+        background: white;
+        max-width: 500px;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+        color: #2b4f81;
+        margin-bottom: 10px;
+    }
+    .date, .place {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+    form {
+        margin-top: 20px;
+        text-align: left;
+    }
+    label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+        color: #2b4f81;
+    }
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+    button {
+        margin-top: 15px;
+        background-color: #2b4f81;
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        width: 100%;
+    }
+    button:hover {
+        background-color: #1e3a5f;
+    }
+    .success {
+        color: green;
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h1> Hola sopon, te invito al cumpleaños del man mas salvaje de esta tierra 🔥</h1>
+    <p class="date">📅 13 de agosto de 2025 - 6:30 PM</p>
+    <p class="place">📍 Mi Casa obviamente</p>
+    <p> OJITOOOOO Regalos de 5000 $💸💷 para arriba</p>
+
+    <form id="confirmForm">
+        <label>Tu nombre obviamente:</label>
+        <input type="text" name="nombre" required>
+
+        <label>¿Asistirás convicto?</label>
+        <select name="asistencia" required>
+            <option value="">-- Selecciona una opción --</option>
+            <option value="Sí">Sí, Messi THE GOAT🦌</option>
+            <option value="No">No, soy un imbecil</option>
+        </select>
+
+        <button type="submit">Confirmar asistencia</button>
+    </form>
+
+    <p id="msg" class="success"></p>
+</div>
+
+<!-- Librería confeti -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+<script>
+    // Animación fade-in al cargar
+    window.addEventListener('load', () => {
+        document.body.classList.add('loaded');
+    });
+
+    const form = document.getElementById('confirmForm');
+    const msg = document.getElementById('msg');
+
+    if(localStorage.getItem('respuestaEnviada')) {
+        form.style.display = 'none';
+        msg.textContent = "✅ Ya enviaste tu respuesta. ¡Gracias!";
+    }
+
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+
+        fetch("https://script.google.com/macros/s/AKfycbxMQka6OZ1pHezbRmerugoOy0t_Nu41D7f0meYqAQmR_G9aQrjua3iFsz7-wxdnuKvWQw/exec", {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nombre: this.nombre.value,
+                asistencia: this.asistencia.value
+            })
+        });
+
+        localStorage.setItem('respuestaEnviada', 'true');
+        msg.textContent = "✅ Respuesta enviada correctamente";
+        form.style.display = 'none';
+
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+    });
+</script>
+
+</body>
+</html>
